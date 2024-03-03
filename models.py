@@ -148,17 +148,14 @@ class enc_mtan_rnn(nn.Module):
         
         mask = mask[:, :, :self.dim]
         
-        nmask = probabilistic_mask_update(mask, 21, 10, 10)
+        nmask = probabilistic_mask_update(mask, 11, 5, 10, 0.4)
                 
         # torch.logical_or을 사용하여 논리 OR 연산 수행
-        fmask = torch.logical_or(nmask > 0, mask > 0)
-
-        # 결과를 부동소수점 텐서로 변환
-        fmask = fmask.float()        
-        fmask = torch.ones_like(mask)
+        fmask = nmask     
+        # fmask = torch.ones_like(mask)
         # pred_x = pred_x.view(1, 50, pred_x.shape[1], pred_x.shape[2]) #nsample, batch, seqlen, dim
-        if random.random() < 0.001:
-            print(f"mask: {mask.sum(), fmask.sum()}")
+        # if random.random() < 0.001:
+        #     print(f"mask: {mask.sum(), fmask.sum()}")
         #     print("predx", pred_x.shape, pred_x[0, :, :])
 
         # pred_x = pred_x * fmask

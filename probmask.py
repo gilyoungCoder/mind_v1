@@ -1,7 +1,7 @@
 import torch
 import torch.nn.functional as F
 
-def probabilistic_mask_update(mask, kernel_size=3, padding=1, alpha = 10):
+def probabilistic_mask_update(mask, kernel_size=3, padding=1, alpha = 10, beta = 1.5):
     """
     mask: 입력 마스킹 텐서, 형태는 (batch, timestep, feature)
     kernel_size: 주변을 확인할 커널의 크기 (timestep 기준)
@@ -18,7 +18,7 @@ def probabilistic_mask_update(mask, kernel_size=3, padding=1, alpha = 10):
     # print("nc",neighbors_count)
     # 주변에 1이 있는 비율 계산
     neighbors_ratio = neighbors_count / kernel_size
-    higher_probs = torch.sigmoid(neighbors_ratio * alpha)
+    higher_probs = torch.sigmoid(neighbors_ratio * alpha - beta)
     # 확률적 업데이트를 위한 마스크 생성
     updated_mask = torch.bernoulli(higher_probs)
     # updated_mask = torch.where(neighbors_ratio >= alpha, torch.ones_like(neighbors_ratio), torch.zeros_like(neighbors_ratio))
