@@ -20,7 +20,7 @@ def probabilistic_mask_update(mask, kernel_size=3, padding=1, alpha = 10):
     neighbors_ratio = neighbors_count / kernel_size
     higher_probs = torch.sigmoid(neighbors_ratio * alpha)
     # 확률적 업데이트를 위한 마스크 생성
-    updated_mask = torch.bernoulli(neighbors_ratio)
+    updated_mask = torch.bernoulli(higher_probs)
     # updated_mask = torch.where(neighbors_ratio >= alpha, torch.ones_like(neighbors_ratio), torch.zeros_like(neighbors_ratio))
 
     
